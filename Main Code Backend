@@ -1,0 +1,605 @@
+#Login-System
+def start():
+    users = {'Niranj':'1703','Gowtham':'1010','test':'0','0':'0'}  # Dictionary to store username-password pairs
+    while True:
+        print()
+        print("\n1. Sign Up")
+        print("2. Log In")
+        print("3. Exit")
+        print()
+        choice = input("Enter your choice: ")
+        if choice == '1':
+            sign_up(users)
+        elif choice == '2':
+            log_in(users)
+        elif choice == '3':
+            print("Exiting program.")
+            break
+        else:
+            print("Invalid choice. Please enter a valid option.")
+            
+#Function to Sign up
+def sign_up(users):
+    username = input("Enter a username: ")
+    if username in users:
+        print("Username already exists. Please choose a different one.")
+        return
+    password = input("Enter a password: ")
+    users[username] = password
+    print("Sign up successful!")
+    print()
+    print("Login to Continue:")
+    print()
+    log_in(users)
+
+# Function to log in
+def log_in(users):
+    username = input("Enter your username: ")
+    password = input("Enter your password: ")
+    print()
+    if username in users and users[username] == password:
+        print("Login successful!")
+        print()
+        selector()
+    else:
+        print("Incorrect username or password.")
+        print()
+        
+
+#Main Action selector
+def selector():
+    print()
+    print("What do you want to start with?")
+    print("1-Order Food")
+    print("2-Medicine")
+    print("3-Groceries")
+    print("4-Customer Support")
+    print()
+    o = int(input("enter your choice: "))
+    print()
+    if o in range(1, 5):
+        cond(o)
+    else:
+        print("Invalid choice")
+        selector()
+
+# Condition Main Action
+def cond(o):
+    if o == 1:
+        food()
+    elif o == 2:
+        med()
+    elif o == 3:
+        gro()
+    elif o == 4:
+        supp()
+    else:
+        selector()
+      
+    
+#Food
+
+#Main Food
+def food():
+    restaurants = {
+        "Restaurant A": ["Pizza", "Burger", "Pasta"],
+        "Restaurant B": ["Sushi", "Ramen", "Pizza"],
+        "Restaurant C": ["Tacos", "Burritos", "Quesadillas"]
+    }
+    print()
+    print("Welcome to the Food Delivery!")
+    print("1. View Available Restaurants")
+    print("2. Search by Restaurant Name for Menu")
+    print("3. Search by Food Item")
+    print("4. Add a Food Item to Cart")
+    print("5. View Cart")
+    print("6. Checkout with a Proper Bill")
+    print("7. Exit")
+    print()
+
+    choice = input("Enter your choice: ")
+    print()
+    cart = []
+
+    if choice == "1":
+        rest(restaurants)
+    elif choice == "2":
+        searchrest(restaurants)
+    elif choice == "3":
+        searchfood(restaurants)
+    elif choice == "4":
+        add_to_car(restaurants)
+    elif choice == "5":
+        view_car(foodcart)
+    elif choice == "6":
+        checkou(foodcart)
+    elif choice == "7":
+        print("Thank you for using the Food Delivery App!")
+        selector()
+    else:
+        print("Invalid choice. Please enter a number between 1 and 7.")
+        food()
+
+#Available Restaurants
+def rest(restaurants):
+    print()
+    print("\nAvailable Restaurants:")
+    for restaurant in restaurants:
+        print(restaurant)
+    food()
+
+#Search by Restaurant
+def searchrest(restaurants):
+    print()
+    restaurant_name = input("Enter the name of the restaurant: ").title()
+    if restaurant_name in restaurants:
+        print(f"\n{restaurant_name} Menu:")
+        for item in restaurants[restaurant_name]:
+            print(item)
+    else:
+        print("Restaurant not found.")
+    food()
+
+#Search by Food
+def searchfood(restaurants):
+    print()
+    food_item = input("Enter the food item: ").title()
+    found = False
+    for restaurant, menu in restaurants.items():
+        if food_item in menu:
+            print(f"\n{food_item} is available at {restaurant}")
+            found = True
+    if not found:
+        print("Food item not found in any restaurant.")
+    food()
+
+#Add to cart Food
+def add_to_car(restaurants):
+    global foodcart
+    print()
+    print("1.Restaurant A")
+    print("2.Restaurant B")
+    print("3.Restaurant C")
+    print()
+    n = int(input("Choose your restaurant: "))
+    print()
+    foodcart = []
+    if n == 1:
+        print(*restaurants["Restaurant A"], sep=' ')
+        foods = restaurants["Restaurant A"]
+        cart(foods, foodcart)
+    elif n == 2:
+        print(*restaurants["Restaurant B"], sep=' ')
+        foods = restaurants["Restaurant B"]
+        cart(foods, foodcart)
+    elif n == 3:
+        print(*restaurants["Restaurant C"], sep=' ')
+        foods = restaurants["Restaurant C"]
+        cart(foods, foodcart)
+    print()
+
+    food()
+
+#Food Cart
+def cart(foods, foodcart):
+    while True:
+        print()
+        choice = int(input("Enter the number of the food item to add to cart (or 0 to finish): "))
+        if choice>=len(foods)+1:
+            print("Cart was updated!")
+            break
+        if choice == 0:
+            break
+        foodcart.append(foods[choice-1])
+        print("{fname} is added to your cart ".format(fname=(', '.join(foodcart))))
+    return foodcart
+
+#View Cart Food   
+def view_car(foodcart):#code for view cart
+    if foodcart:
+        print()
+        print("\nYour Cart:")
+        for i in foodcart:
+            print(i)
+    else:
+        print("\nYour cart is empty.")  
+    food()
+
+#Checkout Food
+def checkou(foodcart):
+    print()
+    total = calculate_bill(foodcart)
+    int(total)
+    if total > 0:
+        print("Total bill amount: {ftotal}".format(ftotal =total))
+        print("Thank you for your order! Enjoy your meal!")
+        
+    else:
+        print("\nYour cart is empty. Please add items to your cart before checking out.")
+    food()
+    
+#Calculate Bill Food
+def calculate_bill(foodcart):
+    prices = {"Pizza": 10,
+              "Burger": 8,
+              "Pasta": 12,
+              "Sushi": 15,
+              "Ramen": 11,
+              "Tacos": 9,
+              "Burritos": 10,
+              "Quesadillas": 10}
+    total = 0
+    for item in foodcart:
+        if item in prices.keys():
+            print(item)
+            total += prices[item]
+        else:
+            print("Something went wrong")
+            food()
+            return  # Exit the function if there's an issue
+    return total
+        
+
+#Groceries
+
+#Menu Groceries
+def display_menu():
+    print("Menu:")
+    print("1. View Available Items")
+    print("2. Add Item to Cart")
+    print("3. View Cart")
+    print("4. Checkout")
+    print("5. Exit")
+
+#View Available Items Groceries
+def view_items(items):
+    print("Available Items:")
+    for index, item in enumerate(items, start=1):
+        print(f"{index}. {item}")
+
+#Add to Cart Groceries
+def add_to_cart(items, cart):
+    view_items(items)
+    choice = input("Enter the number of the item to add to cart: ")
+    if choice.isdigit() and 1 <= int(choice) <= len(items):
+        item_index = int(choice) - 1
+        cart.append(items[item_index])
+        print(f"{items[item_index]} added to cart.")
+    else:
+        print()
+        print("Invalid input. Please enter a valid item number.")
+
+#View cart Groceries
+def view_cart(cart):
+    if cart:
+        print()
+        print("Your Cart:")
+        for item in cart:
+            print(item)
+    else:
+        print()
+        print("Your cart is empty.")
+        
+#Checkout Groceries
+def checkout(cart):
+    if cart:
+        print()
+        print("Checkout successful!")
+        print("Thank you for shopping with us!")
+        cart.clear()
+    else:
+        print()
+        print("Your cart is empty. Please add items before checkout.")
+
+#Main Groceries
+def gro():
+    items = ["Apples", "Bananas", "Oranges", "Tomatoes", "Potatoes"]
+    cart = []
+
+    while True:
+        display_menu()
+        choice = input("Enter your choice: ")
+
+        if choice == "1":
+            view_items(items)
+        elif choice == "2":
+            add_to_cart(items, cart)
+        elif choice == "3":
+            view_cart(cart)
+        elif choice == "4":
+            checkout(cart)
+        elif choice == "5":
+            print("Thank you for using Simple Grocery Ordering System!")
+            selector()
+        else:
+            print("Invalid choice. Please enter a number between 1 and 5.")
+
+            
+# Medicine
+
+#Main Medicine 
+def med():
+    mk = {'Ibuprofen': 1, 'Advil': 1, 'Motrin': 1, 'Acetaminophen': 2, 'Tylenol': 2, 'Paracetamol': 2, 'Aspirin': 3,
+          'Lisinopril': 4, 'Levothyroxine': 5, 'Synthroid': 5, 'Metformin': 6, 'Atorvastatin': 7, 'Lipitor': 7,
+          'Omeprazole': 8, 'Prilosec': 8, 'Amlodipine': 9, 'Ventolin': 10} 
+    ml = {'Ibuprofen': 10, 'Advil': 10, 'Motrin': 10, 'Acetaminophen': 5, 'Tylenol': 5, 'Paracetamol': 5, 'Aspirin': 15,
+          'Lisinopril': 8, 'Levothyroxine': 25, 'Synthroid': 25, 'Metformin': 50, 'Atorvastatin': 100, 'Lipitor': 100,
+          'Omeprazole': 65, 'Prilosec': 65, 'Amlodipine': 75, 'Ventolin': 90}
+    mt ={1:'Ibuprofen ,  Advil  , Motrin',2:'Acetaminophen , Tylenol , Paracetamol',3:'Not Available',4:'Not Available',
+         5:'Levothyroxine , Synthroid',6:'Not Available',7:'Atorvastatin , Lipitor',8:'Omeprazole , Prilosec',9:'Not Available',
+         10:'Not Available'}
+    mi = {1: 'A nonsteroidal anti-inflammatory drug (NSAID) commonly used to relieve pain, reduce inflammation, and lower fever.',
+          2: 'A pain reliever and fever reducer widely used for headaches, muscle aches, arthritis, and reducing fever.',
+          3: "NSAID used to relieve pain, reduce inflammation, and prevent blood clotting. It's commonly used for headaches, minor aches, and as a preventive measure for heart attacks and strokes.",
+          4: "An ACE inhibitor used to treat high blood pressure (hypertension), heart failure, and to improve survival after heart attacks.",
+          5: "A synthetic form of the thyroid hormone thyroxine, used to treat hypothyroidism (underactive thyroid).",
+          6: "An oral medication used to treat type 2 diabetes by lowering blood sugar levels.",
+          7: "A statin medication used to lower cholesterol levels and reduce the risk of cardiovascular disease.",
+          8: "A proton pump inhibitor (PPI) used to reduce stomach acid production, treating conditions such as gastroesophageal reflux disease (GERD) and ulcers.",
+          9: "A calcium channel blocker used to treat high blood pressure (hypertension) and chest pain (angina).",
+          10: "A bronchodilator used to treat asthma and chronic obstructive pulmonary disease (COPD) by opening the airways in the lungs."}
+    print()
+    print("Welcome to Medicine Delivery System!")
+    print("What action do you want to perform?")
+    print("1-Order Medicine")
+    print("2-Know about Medicine")
+    print("3-Exit")
+    print()
+    op = int(input("Enter your choice: "))
+    if op in range(1, 4):
+        
+        #Order Medicine
+        if op == 1:
+            nt = 0
+            mcart = []
+            qtcart = []
+            a = 'y'
+            while a.lower() == "y":
+                m = input("Enter the medicine you would like to order: ").title()
+                if m in ml.keys():
+                    nq = int(input("enter the required quantity"))
+                    mcart.append(m)
+                    qtcart.append(nq)
+                    t = ml.get(m)
+                    ta = nq * t
+                    nt += ta + (0.1 * ta)
+                    print('Your order is for', qtcart, mcart, 'the current total is:', nt)
+                else:
+                    print("Medicine not available!")
+                print()
+                a = input("Do you wish to continue: \n if yes press 'y'")
+                print()
+            inp=int(input("Do you wish to place the order: if yes press 1"))
+            if inp==1:
+                print("Order placed sucessfully!")
+            med()
+            
+        #About Medicine
+        elif op == 2:
+            a = 'yes'
+            while a.lower() == "yes":
+                m = input("Enter the medicine about which you would like to know about: ").title()
+                if m in ml.keys():
+                    infokey = mk.get(m)
+                    print(m)
+                    print(mi.get(infokey))
+                else:
+                    print("Medicine not available in database!")
+                    print()
+                a = input("Do you wish to continue: \n if yes press 'yes'")
+            med()
+        elif op == 3:
+            selector()
+        selector()
+    else:
+        print("Invalid choice")
+        med()
+        
+        
+#Customer Support
+
+#Main
+def supp():
+    print()
+    print("What do you want to start with?")
+    print("1-Chat with CHERA(Ai Bot)")
+    print("2-Chat with Human Assistant")
+    print("3-Go Back to Main Menu")
+    print()
+    opt = int(input("Enter your choice: "))
+    print()
+    if opt in range(1, 4):
+        con(opt)
+    else:
+        print("Invalid choice")
+        supp()
+    supp()
+        
+#Customer Support Main Condition
+def con(opt):
+    if opt == 1:
+        ai()
+    elif opt == 2:
+        hum()
+    elif opt == 3:
+        selector()
+    else:
+        supp()
+        
+#Human Support
+def hum():
+    print()
+    print("Welcome to NjAi's Human Support Asistant!")
+    print()
+    s=input("Enter your message here: ")
+    print("Hey!,Thanks for your message. We're routing you to a human representative who will address your needs promptly")
+    supp()
+    
+#AI Support
+def ai():
+    print()
+    print("Welcome to CHERA powered by NjAi!")
+    print()
+    print("How can I help you today?")
+    print("1-General Queries")
+    print("2-Queries related to availability of a medicine")
+    print("3-Queries related to your order")
+    print("4-Queries related to payment or refund")
+    print("5-Exit  to Main Support menu")
+    print()
+    inp=int(input("Enter you choice: "))
+    print()
+    if inp==1:
+        gq()
+    elif inp==2:
+        am()
+    elif inp==3:
+        orde()
+    elif inp==4:
+        pr()
+    elif inp==5:
+        supp()
+    else:
+        print("Invalid choice!")
+        ai()
+    
+def gq():
+    print()
+    print("1-I received a discount code after placing my order. Can I apply it retroactively to receive the discount?")
+    print("2-I paid for my order, but I haven't received a receipt. Can you resend it to me?")
+    print("3-Exit  to Main Support menu")
+    print()
+    choic=int(input("Enter your choice:"))
+    print()
+    if choic in range(1,4):
+        if choic==1:
+            print("We appreciate your interest in using the discount code. Unfortunately, discount codes must be applied at the time of placing the order and cannot be applied retroactively. However, you can use the discount code for your next purchase. If you encounter any issues applying the code during checkout, please let us know, and we'll be happy to assist you.")
+            ai()
+        elif choic==2:
+            print("Certainly! We understand the importance of having a receipt for your order. Please provide us with your order details, including the order number and your registered email address. Our team will resend the receipt to your email promptly. If you have any other questions or concerns, feel free to let us know.")
+            ai()
+        else:
+            supp()
+    else:
+        print("Invalid choce!")
+        gq()
+    
+def am():
+    mk = {'Ibuprofen': 1, 'Advil': 1, 'Motrin': 1, 'Acetaminophen': 2, 'Tylenol': 2, 'Paracetamol': 2, 'Aspirin': 3,
+          'Lisinopril': 4, 'Levothyroxine': 5, 'Synthroid': 5, 'Metformin': 6, 'Atorvastatin': 7, 'Lipitor': 7,
+          'Omeprazole': 8, 'Prilosec': 8, 'Amlodipine': 9, 'Ventolin': 10} 
+    ml = {'Ibuprofen': 10, 'Advil': 10, 'Motrin': 10, 'Acetaminophen': 5, 'Tylenol': 5, 'Paracetamol': 5, 'Aspirin': 15,
+          'Lisinopril': 8, 'Levothyroxine': 25, 'Synthroid': 25, 'Metformin': 50, 'Atorvastatin': 100, 'Lipitor': 100,
+          'Omeprazole': 65, 'Prilosec': 65, 'Amlodipine': 75, 'Ventolin': 90}
+    mt ={1:'Ibuprofen ,  Advil  , Motrin',2:'Acetaminophen , Tylenol , Paracetamol',3:'Not Available',4:'Not Available',
+         5:'Levothyroxine , Synthroid',6:'Not Available',7:'Atorvastatin , Lipitor',8:'Omeprazole , Prilosec',9:'Not Available',
+         10:'Not Available'}
+    mi = {1: 'A nonsteroidal anti-inflammatory drug (NSAID) commonly used to relieve pain, reduce inflammation, and lower fever.',
+          2: 'A pain reliever and fever reducer widely used for headaches, muscle aches, arthritis, and reducing fever.',
+          3: "NSAID used to relieve pain, reduce inflammation, and prevent blood clotting. It's commonly used for headaches, minor aches, and as a preventive measure for heart attacks and strokes.",
+          4: "An ACE inhibitor used to treat high blood pressure (hypertension), heart failure, and to improve survival after heart attacks.",
+          5: "A synthetic form of the thyroid hormone thyroxine, used to treat hypothyroidism (underactive thyroid).",
+          6: "An oral medication used to treat type 2 diabetes by lowering blood sugar levels.",
+          7: "A statin medication used to lower cholesterol levels and reduce the risk of cardiovascular disease.",
+          8: "A proton pump inhibitor (PPI) used to reduce stomach acid production, treating conditions such as gastroesophageal reflux disease (GERD) and ulcers.",
+          9: "A calcium channel blocker used to treat high blood pressure (hypertension) and chest pain (angina).",
+          10: "A bronchodilator used to treat asthma and chronic obstructive pulmonary disease (COPD) by opening the airways in the lungs."}
+    print("1-Is this medicine available?")
+    print("2-Do you have a paricular medicine in stock?")
+    print("3-Are there any alternatives to this medicine?")
+    print("4-Can I get a refill of my prescription for a medicine?")
+    print("5-When will this medicine be restocked?")
+    print("6-Exit  to Main Support menu")
+    print()
+    ch=int(input("Enter your choice:"))
+    if ch in range(1,7):
+        av=input("Medicine name: ")
+        if ch==1:
+            if av in mk.keys():
+                print("Yes,",av, "is currently available in our inventory.")
+            else:
+                print("No,",av, "is not currently available in our inventory.But you can check for alternatives!")
+        elif ch==2:
+            if av in mk.keys():
+                print("Yes,",av, "is in stock and ready for delivery.")
+            else:
+                print("No,",av, "is not in stock .But you can check for alternatives!")
+        elif ch==3:
+            if av in mk.keys():
+                al=mk.get(av)
+                print("Alternatives for",av,"are",mt.get(al))
+        elif ch==4:
+            if av in mk.keys():
+                print("Yes, we can arrange a refill of your prescription for",av,"Please provide your prescription details.")
+            else:
+                print("We are extremely sorry,",av, "is not currently available in our inventory.But you can check for alternatives!")
+        elif ch==5:
+            if av in mk.keys():
+                print("Yes,",av, "is currently available in our inventory.")
+            else:
+                print("We expect to restock",av,"within 7 bussiness days. In the meantime, we can assist you with alternative options if needed.")
+        else:
+            supp()
+    else:
+        print("Invalid choice")
+        am()
+    ai()
+    
+def orde():
+    print()
+    print("1-What is the status of my order?")
+    print("2-When will my order be delivered?")
+    print("3-I've made the payment, but I haven't received any confirmation. Can you confirm if the payment was successful?")
+    print("4-I couldn't find a particular medicine in the app. Is it available?")
+    print("5-I need to make changes to my order / cancel my order. How can I do that?")
+    print("6-Exit  to Main Support menu")
+    print()
+    cho=int(input("Enter your choice:"))
+    print()
+    if cho in range(1,7):
+        if cho==1:
+            print("Your order is currently being processed and is expected to be dispatched within 1 day. You can track your order status in the app under 'My Orders'.")
+        elif cho==2:
+            print( "Your order is scheduled for delivery on 11 May 2024 between 10am-10pm. Our delivery partner will notify you once the order is out for delivery.")
+        elif cho==3:
+            print("Thank you for your payment. We've received confirmation of your payment and your order is now being processed. You'll receive a confirmation email shortly.")
+        elif cho==4:
+            print("We apologize for the inconvenience. Please provide the name of the medicine, and we'll check its availability in our inventory. Alternatively, you can explore similar medicines as per your requirement.")
+        elif cho==5:
+            print( "Sure, please provide your order details, and we'll assist you with the necessary modifications or cancellation. Please note that order modifications or cancellations are subject to our cancellation policy.")
+        else:
+            supp()
+    else:
+        print("Invalid choice!")
+        am()
+    ai()
+
+def pr():
+    print()
+    print("1-I was charged twice for my recent order. Can you please check and refund the extra amount?")
+    print("2-I received a notification that my payment failed, but I see the amount deducted from my account. When will I get my refund?")
+    print("3-I accidentally placed the wrong order and made the payment. Can I cancel the order and get a refund?")
+    print("4-I returned a product, but I haven't received the refund yet. Can you please update me on the refund status?")
+    print("5-I was overcharged for my order. How can I request a refund for the excess amount?")
+    print("6-Exit  to Main Support menu")
+    print()
+    choi=int(input("Enter your choice:"))
+    print()
+    if choi in range(1,7):
+        if choi==1:
+            print("We apologize for the inconvenience. Please provide us with your order details, including the order number and payment transaction IDs. Our team will investigate the issue promptly and initiate the refund for the duplicate charge.")
+        elif choi==2:
+            print( "We regret the inconvenience caused. Payment failures can sometimes occur due to technical issues. Rest assured, if the payment was deducted from your account, it will be automatically refunded within 7 business days. Please check your bank statement for the refund transaction.")
+        elif choi==3:
+            print("We understand mistakes happen. If you wish to cancel your order, please reach out to our customer support team immediately with your order details. If the order hasn't been processed yet, we'll cancel it and initiate a refund to your original payment method.")
+        elif choi==4:
+            print("We appreciate your patience. Once we receive the returned product and verify its condition, we initiate the refund process. Refunds typically take 7 business days to reflect in your account, depending on your bank's processing time. You'll receive an email notification once the refund is processed.")
+        elif choi==5:
+            print("We apologize for the billing error. Please provide us with the relevant details, including your order number and the discrepancy in the amount charged. Our finance team will review the transaction and promptly process the refund for the excess amount to your original payment method.")
+        else:
+            supp()
+    ai()
+
+
+#Main
+start()
